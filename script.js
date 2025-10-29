@@ -60,6 +60,25 @@ document.addEventListener('DOMContentLoaded', function() {
       header.style.background = 'rgba(11,18,32,.6)';
     }
   });
+  
+  // Mobile card highlight on touch
+  var cards = document.querySelectorAll('.card');
+  cards.forEach(function(card) {
+    card.addEventListener('touchstart', function() {
+      this.classList.add('card-touching');
+    }, { passive: true });
+    
+    card.addEventListener('touchend', function() {
+      var self = this;
+      setTimeout(function() {
+        self.classList.remove('card-touching');
+      }, 150);
+    }, { passive: true });
+    
+    card.addEventListener('touchcancel', function() {
+      this.classList.remove('card-touching');
+    }, { passive: true });
+  });
 });
 
 
