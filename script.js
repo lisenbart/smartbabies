@@ -1,27 +1,46 @@
-// script.js
-document.addEventListener('DOMContentLoaded', () => {
-  const y = document.getElementById('year');
-  if (y) y.textContent = new Date().getFullYear().toString();
+document.addEventListener('DOMContentLoaded', function() {
+  var yearEl = document.getElementById('year');
+  if (yearEl) {
+    yearEl.textContent = new Date().getFullYear().toString();
+  }
 
-  document.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.addEventListener('click', e => {
-      const id = a.getAttribute('href'); if (!id || id === '#') return;
-      const el = document.querySelector(id); if (!el) return;
-      e.preventDefault(); el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  var links = document.querySelectorAll('a[href^="#"]');
+  links.forEach(function(anchor) {
+    anchor.addEventListener('click', function(e) {
+      var targetId = anchor.getAttribute('href');
+      if (!targetId || targetId === '#') {
+        return;
+      }
+      var target = document.querySelector(targetId);
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     });
   });
 
-  const setText = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  function setText(id, value) {
+    var el = document.getElementById(id);
+    if (el) {
+      el.textContent = value;
+    }
+  }
   setText('metricViews', '100k+');
   setText('metricWatch', '3m 20s');
   setText('metricRegions', 'UA, EU, US');
 
-  const form = document.querySelector('.cta-form');
-  form?.addEventListener('submit', e => {
-    e.preventDefault();
-    const email = form.querySelector('input[type="email"]').value.trim();
-    if (!email) return;
-    alert(`Thanks! We will reach out: ${email}`);
-    form.reset();
-  });
+  var form = document.querySelector('.cta-form');
+  if (form) {
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      var emailInput = form.querySelector('input[type="email"]');
+      if (emailInput) {
+        var email = emailInput.value.trim();
+        if (email) {
+          alert('Thanks! We will reach out: ' + email);
+          form.reset();
+        }
+      }
+    });
+  }
 });
