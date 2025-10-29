@@ -42,7 +42,10 @@ body {
   margin: 0;
   font-family: 'SF Compact Rounded', -apple-system, system-ui, Segoe UI, Roboto, Arial, sans-serif;
   color: var(--text);
-  background: radial-gradient(1200px 700px at 80% -10%, #16325c 0%, transparent 60%) no-repeat var(--bg);
+  background:
+    linear-gradient(rgba(11,18,32,.68), rgba(11,18,32,.68)),
+    url('assets/bg-stars.webp') center / cover no-repeat fixed,
+    radial-gradient(1200px 700px at 80% -10%, #16325c 0%, transparent 60%) no-repeat var(--bg);
   line-height: 1.6;
 }
 
