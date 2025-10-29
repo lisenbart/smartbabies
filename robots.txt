@@ -1,1 +1,4 @@
+User-agent: *
+Allow: /
 
+Sitemap: https://lisenbart.github.io/smartbabies-site/sitemap.xml
