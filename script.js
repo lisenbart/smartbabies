@@ -14,7 +14,14 @@ document.addEventListener('DOMContentLoaded', function() {
       var target = document.querySelector(targetId);
       if (target) {
         e.preventDefault();
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        var headerOffset = 64;
+        var elementPosition = target.getBoundingClientRect().top;
+        var offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
       }
     });
   });
@@ -43,4 +50,14 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   }
+  
+  var header = document.querySelector('.site-header');
+  window.addEventListener('scroll', function() {
+    var currentScroll = window.pageYOffset;
+    if (currentScroll > 100) {
+      header.style.background = 'rgba(11,18,32,.95)';
+    } else {
+      header.style.background = 'rgba(11,18,32,.6)';
+    }
+  });
 });
