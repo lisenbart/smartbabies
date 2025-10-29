@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://lisenbart.github.io/smartbabies-site/sitemap.xml
+Sitemap: https://lisenbart.github.io/smartbabies/sitemap.xml
