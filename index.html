@@ -1,0 +1,137 @@
+<!-- index.html -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SmartBabies — Edutainment for Kids</title>
+    <meta name="description" content="SmartBabies creates joyful educational content with our hero ScoopyCap.">
+    <link rel="icon" href="assets/logo.png">
+    <meta property="og:title" content="SmartBabies — Edutainment for Kids">
+    <meta property="og:description" content="Meet ScoopyCap and explore our brand and investor info.">
+    <meta property="og:image" content="assets/scoopycap.png">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="logo" href="#"><img src="assets/logo.png" alt="SmartBabies" height="36"></a>
+        <nav class="nav">
+          <a href="#about">About</a>
+          <a href="#scoopycap">ScoopyCap</a>
+          <a href="#investors">Investors</a>
+          <a href="#cta" class="btn btn-sm">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container hero-inner">
+          <div class="hero-copy">
+            <h1>Learning through adventure</h1>
+            <p>SmartBabies produces safe, cheerful learning videos. Our hero <strong>ScoopyCap</strong> turns curiosity into discovery.</p>
+            <div class="hero-actions">
+              <a href="https://www.youtube.com/@SmartBabies" target="_blank" rel="noopener" class="btn btn-primary">Watch on YouTube</a>
+              <a href="#investors" class="btn btn-ghost">For Investors</a>
+            </div>
+          </div>
+          <div class="hero-media">
+            <img src="assets/scoopycap.png" alt="ScoopyCap">
+          </div>
+        </div>
+      </section>
+
+      <section class="about" id="about">
+        <div class="container">
+          <h2>About SmartBabies</h2>
+          <p class="section-lead">Edutainment for preschoolers — stories, songs, mini‑quests and learning shorts.</p>
+          <div class="grid-2">
+            <div class="card">
+              <h3>Mission</h3>
+              <p>Inspire kids to explore with kindness, curiosity and play. We cover letters, numbers, colors, safety and emotions.</p>
+            </div>
+            <div class="card">
+              <h3>Formats</h3>
+              <p>Short episodes, songs and themed learning videos. Primary channel: <a href="https://www.youtube.com/@SmartBabies" target="_blank" rel="noopener">YouTube</a>.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="character" id="scoopycap">
+        <div class="container">
+          <h2>Meet ScoopyCap</h2>
+          <div class="character-inner">
+            <div class="character-media">
+              <img src="assets/scoopycap.png" alt="ScoopyCap waving">
+            </div>
+            <div class="character-copy card">
+              <h3>Captain of the Starship</h3>
+              <p>ScoopyCap is a friendly explorer who guides kids through bite‑size lessons with humor and encouragement.</p>
+              <ul class="bullets">
+                <li>Role‑model behavior and empathy</li>
+                <li>Clear educational goals per episode</li>
+                <li>Distinctive, lovable visual identity</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="investors" id="investors">
+        <div class="container">
+          <h2>Investors</h2>
+          <p class="section-lead">Concise, professional snapshot.</p>
+          <div class="grid-3">
+            <div class="metric card"><span class="metric-value" id="metricViews">—</span><span class="metric-label">YouTube Views</span></div>
+            <div class="metric card"><span class="metric-value" id="metricWatch">—</span><span class="metric-label">Avg Watch Time</span></div>
+            <div class="metric card"><span class="metric-value" id="metricRegions">—</span><span class="metric-label">Top Regions</span></div>
+          </div>
+          <div class="grid-2" style="margin-top:18px">
+            <div class="card">
+              <h3>Monetization</h3>
+              <ul class="bullets">
+                <li>YouTube ads and partner programs</li>
+                <li>Character licensing and merchandise</li>
+                <li>Music releases and digital platforms</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Roadmap</h3>
+              <ul class="bullets">
+                <li>New content lines (STEM, emotional IQ)</li>
+                <li>Localization and captions for new markets</li>
+                <li>Publisher/OTT partnerships</li>
+              </ul>
+            </div>
+          </div>
+          <div class="invest-cta"><a href="#cta" class="btn btn-primary">Request pitch deck</a></div>
+        </div>
+      </section>
+
+      <section class="cta" id="cta">
+        <div class="container cta-inner">
+          <h2>Contact</h2>
+          <p>Get investor materials and partnership details.</p>
+          <form class="cta-form" action="#" method="post">
+            <label class="sr-only" for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="you@example.com" required>
+            <button type="submit" class="btn btn-primary">Send request</button>
+          </form>
+          <small class="muted">Or email us at <a href="mailto:hello@smartbabies.example">hello@smartbabies.example</a></small>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>© <span id="year"></span> SmartBabies</div>
+        <div class="footer-links"><a href="https://www.youtube.com/@SmartBabies" target="_blank" rel="noopener">YouTube</a></div>
+      </div>
+    </footer>
+
+    <script src="script.js" defer></script>
+  </body>
+</html>
