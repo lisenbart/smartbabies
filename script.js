@@ -52,14 +52,37 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   
   var header = document.querySelector('.site-header');
+  var bodyEl = document.body;
+  
+  // Parallax setup для мобільних
+  var parallaxSpeed = 0.25; // Легкий ефект - фон рухається на 25% від швидкості скролу
+  
+  function isMobileView() {
+    return window.innerWidth <= 820;
+  }
+  
   window.addEventListener('scroll', function() {
-    var currentScroll = window.pageYOffset;
+    var currentScroll = window.pageYOffset || window.scrollY;
+    
+    // Header background change
     if (currentScroll > 100) {
       header.style.background = 'rgba(11,18,32,.95)';
     } else {
       header.style.background = 'rgba(11,18,32,.6)';
     }
-  });
+    
+    // Parallax effect for mobile background
+    if (isMobileView()) {
+      var bgOffset = currentScroll * parallaxSpeed;
+      if (bodyEl) {
+        bodyEl.style.setProperty('--bg-parallax-y', bgOffset + 'px');
+      }
+    } else {
+      if (bodyEl) {
+        bodyEl.style.setProperty('--bg-parallax-y', '0px');
+      }
+    }
+  }, { passive: true });
   
   // Mobile card highlight on touch
   var cards = document.querySelectorAll('.card');
