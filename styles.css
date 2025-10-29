@@ -511,3 +511,7 @@ a {
     width: 100%;
   }
 }
+.highlights, .market { padding: var(--section-spacing) 0; }
+
+.market .card h3 { color: var(--secondary); }
+.highlights .card h3 { color: var(--accent); }
