@@ -274,7 +274,7 @@ a {
 }
 
 .card {
-  background: var(--card);
+  background: rgba(18,26,43,.2);
   border: 1px solid #1b253a;
   border-radius: 16px;
   padding: 24px;
@@ -518,3 +518,15 @@ a {
 
 .market .card h3 { color: var(--secondary); }
 .highlights .card h3 { color: var(--accent); }
+
+
+
+@media (max-width: 820px) {
+  body {
+    background:
+      linear-gradient(rgba(11,18,32,.70), rgba(11,18,32,.70)),
+      url('assets/bg-stars.webp') center / cover no-repeat,
+      radial-gradient(1200px 700px at 80% -10%, #16325c 0%, transparent 60%) no-repeat var(--bg);
+    background-attachment: scroll, scroll, scroll;
+  }
+}
