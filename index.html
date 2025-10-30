@@ -312,11 +312,15 @@
     
     <script>
       // Простий тест для мобільних
+      console.log('Test script started');
+      console.log('Window width:', window.innerWidth);
+      console.log('Is mobile:', window.innerWidth <= 820);
+      
       if (window.innerWidth <= 820) {
+        console.log('Mobile detected, showing test divs');
         document.getElementById('mobile-test').style.display = 'block';
         document.getElementById('parallax-test').style.display = 'block';
         document.getElementById('scroll-test').style.display = 'block';
-        console.log('Mobile detected, test divs shown');
         
         // Оновлюємо значення при скролі
         window.addEventListener('scroll', function() {
@@ -337,6 +341,10 @@
             document.getElementById('parallax-value').textContent = 'No element';
           }
         });
+        
+        console.log('Test divs shown and scroll listener added');
+      } else {
+        console.log('Desktop detected, not showing test divs');
       }
     </script>
   </body>
