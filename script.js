@@ -67,12 +67,17 @@ document.addEventListener('DOMContentLoaded', function() {
       var currentScroll = window.pageYOffset || window.scrollY || document.documentElement.scrollTop;
       var bgOffset = currentScroll * parallaxSpeed;
       
+      console.log('Parallax update:', { currentScroll, bgOffset, isMobile: isMobileView() });
+      
       // Використовуємо requestAnimationFrame для плавності на iOS
       requestAnimationFrame(function() {
         parallaxBg.style.transform = 'translate3d(0, ' + bgOffset + 'px, 0)';
         parallaxBg.style.webkitTransform = 'translate3d(0, ' + bgOffset + 'px, 0)';
         parallaxBg.style.willChange = 'transform';
+        console.log('Parallax applied:', bgOffset + 'px');
       });
+    } else {
+      console.log('Parallax skipped:', { isMobile: isMobileView(), hasBg: !!parallaxBg });
     }
   }
   
@@ -106,20 +111,29 @@ document.addEventListener('DOMContentLoaded', function() {
   function initCardObserver() {
     if (isMobileView()) {
       var cards = document.querySelectorAll('.card');
+      console.log('Initializing card observer:', { cardsCount: cards.length, isMobile: isMobileView() });
       
       if (cards.length > 0 && 'IntersectionObserver' in window) {
         var observerOptions = {
           root: null,
-          rootMargin: '-30% 0px -30% 0px', // Зона центру 40% екрану
-          threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+          rootMargin: '-25% 0px -25% 0px', // Зона центру 50% екрану
+          threshold: [0, 0.5, 1.0]
         };
         
         var observer = new IntersectionObserver(function(entries) {
           entries.forEach(function(entry) {
+            console.log('Card intersection:', { 
+              target: entry.target.textContent.substring(0, 30), 
+              isIntersecting: entry.isIntersecting,
+              ratio: entry.intersectionRatio 
+            });
+            
             if (entry.isIntersecting) {
               entry.target.classList.add('card-in-center');
+              console.log('Card highlighted');
             } else {
               entry.target.classList.remove('card-in-center');
+              console.log('Card unhighlighted');
             }
           });
         }, observerOptions);
@@ -132,16 +146,64 @@ document.addEventListener('DOMContentLoaded', function() {
       } else {
         console.log('IntersectionObserver not supported or no cards found');
       }
+    } else {
+      console.log('Not mobile view, skipping card observer');
+    }
+  }
+  
+  // Альтернативний підхід для iOS - scroll-based highlighting
+  function initScrollBasedHighlighting() {
+    if (isMobileView()) {
+      var cards = document.querySelectorAll('.card');
+      console.log('Initializing scroll-based highlighting for', cards.length, 'cards');
+      
+      function checkCardsInCenter() {
+        var viewportHeight = window.innerHeight;
+        var centerY = viewportHeight / 2;
+        
+        cards.forEach(function(card) {
+          var rect = card.getBoundingClientRect();
+          var cardCenterY = rect.top + rect.height / 2;
+          var distanceFromCenter = Math.abs(cardCenterY - centerY);
+          var isInCenter = distanceFromCenter < 200 && rect.top < viewportHeight && rect.bottom > 0;
+          
+          if (isInCenter) {
+            if (!card.classList.contains('card-in-center')) {
+              card.classList.add('card-in-center');
+              console.log('Card highlighted via scroll:', card.textContent.substring(0, 30));
+            }
+          } else {
+            if (card.classList.contains('card-in-center')) {
+              card.classList.remove('card-in-center');
+              console.log('Card unhighlighted via scroll:', card.textContent.substring(0, 30));
+            }
+          }
+        });
+      }
+      
+      // Перевіряємо при скролі
+      window.addEventListener('scroll', checkCardsInCenter, { passive: true });
+      
+      // Перевіряємо при завантаженні
+      checkCardsInCenter();
     }
   }
   
   // Ініціалізуємо observer
   initCardObserver();
   
+  // Додатково для iOS - scroll-based підхід
+  if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+    initScrollBasedHighlighting();
+  }
+  
   // Обробка resize для оновлення при зміні розміру екрану
   window.addEventListener('resize', function() {
     updateParallax();
     initCardObserver(); // Переініціалізуємо observer при зміні розміру
+    if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+      initScrollBasedHighlighting();
+    }
   }, { passive: true });
   
   // Початкова ініціалізація
@@ -150,10 +212,28 @@ document.addEventListener('DOMContentLoaded', function() {
   // Додаткова перевірка для iOS
   if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
     console.log('iOS detected, initializing mobile features');
+    
+    // Множинні спроби ініціалізації для iOS
     setTimeout(function() {
       updateParallax();
       initCardObserver();
     }, 100);
+    
+    setTimeout(function() {
+      updateParallax();
+      initCardObserver();
+    }, 500);
+    
+    setTimeout(function() {
+      updateParallax();
+      initCardObserver();
+    }, 1000);
+    
+    // Додаткова перевірка при завантаженні
+    window.addEventListener('load', function() {
+      updateParallax();
+      initCardObserver();
+    });
   }
 });
 
