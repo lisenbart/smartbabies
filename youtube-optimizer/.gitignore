@@ -1,0 +1,14 @@
+.env
+*.json
+optimized_*.txt
+output_description.txt
+update_log_*.json
+__pycache__/
+*.pyc
+*.pyo
+venv/
+env/
+# OAuth credentials
+client_secret.json
+token.pickle
+
