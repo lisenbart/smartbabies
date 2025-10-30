@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        .test-box {
+            background: red;
+            color: white;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 10px;
+        }
+        .test-box.working {
+            background: green;
+        }
+    </style>
+</head>
+<body>
+    <h1>JavaScript Test Page</h1>
+    
+    <div class="test-box" id="test1">
+        Test 1: Static content (має бути червоний)
+    </div>
+    
+    <div class="test-box" id="test2">
+        Test 2: JavaScript test (має стати зеленим)
+    </div>
+    
+    <div class="test-box" id="test3">
+        Test 3: Mobile detection (має показати розмір екрану)
+    </div>
+    
+    <script>
+        // Тест 1: Базовий JavaScript
+        document.getElementById('test2').classList.add('working');
+        document.getElementById('test2').textContent = 'Test 2: JavaScript працює! ✅';
+        
+        // Тест 2: Мобільна версія
+        var isMobile = window.innerWidth <= 820;
+        var test3 = document.getElementById('test3');
+        if (isMobile) {
+            test3.classList.add('working');
+            test3.textContent = 'Test 3: Мобільна версія (' + window.innerWidth + 'x' + window.innerHeight + ') ✅';
+        } else {
+            test3.textContent = 'Test 3: Десктопна версія (' + window.innerWidth + 'x' + window.innerHeight + ')';
+        }
+        
+        // Тест 3: Scroll
+        window.addEventListener('scroll', function() {
+            var scrollPos = window.pageYOffset || window.scrollY || document.documentElement.scrollTop;
+            document.title = 'Scroll: ' + scrollPos + 'px';
+        });
+        
+        console.log('JavaScript test loaded successfully');
+    </script>
+</body>
+</html>
