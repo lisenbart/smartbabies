@@ -1,4 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
+  // Тест для перевірки чи завантажився новий код
+  console.log('🚀 SmartBabies script loaded - version 2.0 with iOS fixes');
+  console.log('📱 Device info:', {
+    userAgent: navigator.userAgent,
+    isIOS: /iPad|iPhone|iPod/.test(navigator.userAgent),
+    viewport: window.innerWidth + 'x' + window.innerHeight
+  });
+  
   var yearEl = document.getElementById('year');
   if (yearEl) {
     yearEl.textContent = new Date().getFullYear().toString();
