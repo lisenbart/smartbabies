@@ -66,75 +66,95 @@ document.addEventListener('DOMContentLoaded', function() {
     if (isMobileView() && parallaxBg) {
       var currentScroll = window.pageYOffset || window.scrollY || document.documentElement.scrollTop;
       var bgOffset = currentScroll * parallaxSpeed;
-      parallaxBg.style.transform = 'translate3d(0, ' + bgOffset + 'px, 0)';
-      parallaxBg.style.webkitTransform = 'translate3d(0, ' + bgOffset + 'px, 0)';
-    }
-  }
-  
-  window.addEventListener('scroll', function() {
-    var currentScroll = window.pageYOffset || window.scrollY || document.documentElement.scrollTop;
-    
-    // Header background change
-    if (currentScroll > 100) {
-      header.style.background = 'rgba(11,18,32,.95)';
-    } else {
-      header.style.background = 'rgba(11,18,32,.6)';
-    }
-    
-    // Parallax effect
-    updateParallax();
-  }, { passive: true });
-  
-  // Intersection Observer для підсвітки блоків при потраплянні в центр екрану
-  if (isMobileView()) {
-    var cards = document.querySelectorAll('.card');
-    
-    if (cards.length > 0 && 'IntersectionObserver' in window) {
-      // Використовуємо rootMargin для визначення центру екрану
-      // Верхня і нижня частини відступають на 40%, щоб створити зону центру (20% екрану)
-      var screenHeight = window.innerHeight;
-      var centerZone = screenHeight * 0.4; // 40% зверху і знизу = 20% центр
-      var rootMarginTop = centerZone + 'px';
-      var rootMarginBottom = centerZone + 'px';
       
-      var observerOptions = {
-        root: null,
-        rootMargin: '-' + rootMarginTop + ' 0px -' + rootMarginBottom + ' 0px',
-        threshold: [0, 0.3, 0.5, 0.7, 1.0]
-      };
-      
-      var observer = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-          var rect = entry.boundingClientRect;
-          var viewportHeight = window.innerHeight;
-          var centerY = viewportHeight / 2;
-          var elementCenterY = rect.top + rect.height / 2;
-          
-          // Перевіряємо чи центр елемента в центрі екрану (±100px допуск)
-          var distanceFromCenter = Math.abs(elementCenterY - centerY);
-          var isInCenter = distanceFromCenter < 150 && entry.isIntersecting;
-          
-          if (isInCenter) {
-            entry.target.classList.add('card-in-center');
-          } else {
-            entry.target.classList.remove('card-in-center');
-          }
-        });
-      }, observerOptions);
-      
-      cards.forEach(function(card) {
-        observer.observe(card);
+      // Використовуємо requestAnimationFrame для плавності на iOS
+      requestAnimationFrame(function() {
+        parallaxBg.style.transform = 'translate3d(0, ' + bgOffset + 'px, 0)';
+        parallaxBg.style.webkitTransform = 'translate3d(0, ' + bgOffset + 'px, 0)';
+        parallaxBg.style.willChange = 'transform';
       });
     }
   }
   
+  // Throttled scroll handler для кращої продуктивності на iOS
+  var scrollTimeout;
+  function handleScroll() {
+    if (scrollTimeout) {
+      return;
+    }
+    
+    scrollTimeout = requestAnimationFrame(function() {
+      var currentScroll = window.pageYOffset || window.scrollY || document.documentElement.scrollTop;
+      
+      // Header background change
+      if (currentScroll > 100) {
+        header.style.background = 'rgba(11,18,32,.95)';
+      } else {
+        header.style.background = 'rgba(11,18,32,.6)';
+      }
+      
+      // Parallax effect
+      updateParallax();
+      
+      scrollTimeout = null;
+    });
+  }
+  
+  window.addEventListener('scroll', handleScroll, { passive: true });
+  
+  // Intersection Observer для підсвітки блоків при потраплянні в центр екрану
+  function initCardObserver() {
+    if (isMobileView()) {
+      var cards = document.querySelectorAll('.card');
+      
+      if (cards.length > 0 && 'IntersectionObserver' in window) {
+        var observerOptions = {
+          root: null,
+          rootMargin: '-30% 0px -30% 0px', // Зона центру 40% екрану
+          threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+        };
+        
+        var observer = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('card-in-center');
+            } else {
+              entry.target.classList.remove('card-in-center');
+            }
+          });
+        }, observerOptions);
+        
+        cards.forEach(function(card) {
+          observer.observe(card);
+        });
+        
+        console.log('Card observer initialized for', cards.length, 'cards');
+      } else {
+        console.log('IntersectionObserver not supported or no cards found');
+      }
+    }
+  }
+  
+  // Ініціалізуємо observer
+  initCardObserver();
+  
   // Обробка resize для оновлення при зміні розміру екрану
   window.addEventListener('resize', function() {
     updateParallax();
+    initCardObserver(); // Переініціалізуємо observer при зміні розміру
   }, { passive: true });
   
-  // Початкова ініціалізація паралаксу
+  // Початкова ініціалізація
   updateParallax();
+  
+  // Додаткова перевірка для iOS
+  if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+    console.log('iOS detected, initializing mobile features');
+    setTimeout(function() {
+      updateParallax();
+      initCardObserver();
+    }, 100);
+  }
 });
 
 
