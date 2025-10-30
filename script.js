@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   
   var header = document.querySelector('.site-header');
-  var bodyEl = document.body;
+  var parallaxBg = document.getElementById('parallax-bg');
   
   // Parallax setup для мобільних
   var parallaxSpeed = 0.25; // Легкий ефект - фон рухається на 25% від швидкості скролу
@@ -61,8 +61,18 @@ document.addEventListener('DOMContentLoaded', function() {
     return window.innerWidth <= 820;
   }
   
+  // Parallax effect function
+  function updateParallax() {
+    if (isMobileView() && parallaxBg) {
+      var currentScroll = window.pageYOffset || window.scrollY || document.documentElement.scrollTop;
+      var bgOffset = currentScroll * parallaxSpeed;
+      parallaxBg.style.transform = 'translate3d(0, ' + bgOffset + 'px, 0)';
+      parallaxBg.style.webkitTransform = 'translate3d(0, ' + bgOffset + 'px, 0)';
+    }
+  }
+  
   window.addEventListener('scroll', function() {
-    var currentScroll = window.pageYOffset || window.scrollY;
+    var currentScroll = window.pageYOffset || window.scrollY || document.documentElement.scrollTop;
     
     // Header background change
     if (currentScroll > 100) {
@@ -71,37 +81,60 @@ document.addEventListener('DOMContentLoaded', function() {
       header.style.background = 'rgba(11,18,32,.6)';
     }
     
-    // Parallax effect for mobile background
-    if (isMobileView()) {
-      var bgOffset = currentScroll * parallaxSpeed;
-      if (bodyEl) {
-        bodyEl.style.setProperty('--bg-parallax-y', bgOffset + 'px');
-      }
-    } else {
-      if (bodyEl) {
-        bodyEl.style.setProperty('--bg-parallax-y', '0px');
-      }
-    }
+    // Parallax effect
+    updateParallax();
   }, { passive: true });
   
-  // Mobile card highlight on touch
-  var cards = document.querySelectorAll('.card');
-  cards.forEach(function(card) {
-    card.addEventListener('touchstart', function() {
-      this.classList.add('card-touching');
-    }, { passive: true });
+  // Intersection Observer для підсвітки блоків при потраплянні в центр екрану
+  if (isMobileView()) {
+    var cards = document.querySelectorAll('.card');
     
-    card.addEventListener('touchend', function() {
-      var self = this;
-      setTimeout(function() {
-        self.classList.remove('card-touching');
-      }, 150);
-    }, { passive: true });
-    
-    card.addEventListener('touchcancel', function() {
-      this.classList.remove('card-touching');
-    }, { passive: true });
-  });
+    if (cards.length > 0 && 'IntersectionObserver' in window) {
+      // Використовуємо rootMargin для визначення центру екрану
+      // Верхня і нижня частини відступають на 40%, щоб створити зону центру (20% екрану)
+      var screenHeight = window.innerHeight;
+      var centerZone = screenHeight * 0.4; // 40% зверху і знизу = 20% центр
+      var rootMarginTop = centerZone + 'px';
+      var rootMarginBottom = centerZone + 'px';
+      
+      var observerOptions = {
+        root: null,
+        rootMargin: '-' + rootMarginTop + ' 0px -' + rootMarginBottom + ' 0px',
+        threshold: [0, 0.3, 0.5, 0.7, 1.0]
+      };
+      
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          var rect = entry.boundingClientRect;
+          var viewportHeight = window.innerHeight;
+          var centerY = viewportHeight / 2;
+          var elementCenterY = rect.top + rect.height / 2;
+          
+          // Перевіряємо чи центр елемента в центрі екрану (±100px допуск)
+          var distanceFromCenter = Math.abs(elementCenterY - centerY);
+          var isInCenter = distanceFromCenter < 150 && entry.isIntersecting;
+          
+          if (isInCenter) {
+            entry.target.classList.add('card-in-center');
+          } else {
+            entry.target.classList.remove('card-in-center');
+          }
+        });
+      }, observerOptions);
+      
+      cards.forEach(function(card) {
+        observer.observe(card);
+      });
+    }
+  }
+  
+  // Обробка resize для оновлення при зміні розміру екрану
+  window.addEventListener('resize', function() {
+    updateParallax();
+  }, { passive: true });
+  
+  // Початкова ініціалізація паралаксу
+  updateParallax();
 });
 
 
