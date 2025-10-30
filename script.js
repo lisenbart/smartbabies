@@ -141,4 +141,38 @@ document.addEventListener('DOMContentLoaded', function() {
     card.addEventListener('focus', function(){ card.classList.add('is-focus'); });
     card.addEventListener('blur', function(){ card.classList.remove('is-focus'); });
   });
+
+  // Підтягування назв для галереї з YouTube (через Netlify Function)
+  if (sbCards.length) {
+    var ids = Array.from(sbCards).map(function(card){
+      try {
+        var url = new URL(card.getAttribute('href'));
+        return url.searchParams.get('v');
+      } catch (e) {
+        return null;
+      }
+    }).filter(Boolean);
+    // уникаємо дублів
+    ids = Array.from(new Set(ids));
+    if (ids.length) {
+      fetch('/.netlify/functions/get-video-details?ids=' + encodeURIComponent(ids.join(',')))
+        .then(function(r){ return r.ok ? r.json() : null; })
+        .then(function(map){
+          if (!map) return;
+          sbCards.forEach(function(card){
+            try {
+              var url = new URL(card.getAttribute('href'));
+              var id = url.searchParams.get('v');
+              var title = map[id];
+              if (title) {
+                var caption = card.querySelector('figcaption');
+                if (caption) { caption.textContent = title; }
+                card.setAttribute('aria-label', 'Play: ' + title);
+              }
+            } catch (e) { /* noop */ }
+          });
+        })
+        .catch(function(){ /* silent */ });
+    }
+  }
 });
