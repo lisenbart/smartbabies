@@ -300,11 +300,43 @@
       Mobile test active
     </div>
     
+    <!-- Тест паралаксу -->
+    <div id="parallax-test" style="position: fixed; top: 60px; right: 10px; background: blue; color: white; padding: 10px; z-index: 9999; display: none;">
+      Parallax: <span id="parallax-value">0px</span>
+    </div>
+    
+    <!-- Тест скролу -->
+    <div id="scroll-test" style="position: fixed; top: 110px; right: 10px; background: green; color: white; padding: 10px; z-index: 9999; display: none;">
+      Scroll: <span id="scroll-value">0px</span>
+    </div>
+    
     <script>
       // Простий тест для мобільних
       if (window.innerWidth <= 820) {
         document.getElementById('mobile-test').style.display = 'block';
-        console.log('Mobile detected, test div shown');
+        document.getElementById('parallax-test').style.display = 'block';
+        document.getElementById('scroll-test').style.display = 'block';
+        console.log('Mobile detected, test divs shown');
+        
+        // Оновлюємо значення при скролі
+        window.addEventListener('scroll', function() {
+          var scrollPos = window.pageYOffset || window.scrollY || document.documentElement.scrollTop;
+          document.getElementById('scroll-value').textContent = scrollPos + 'px';
+          
+          // Перевіряємо чи є елемент паралаксу
+          var parallaxBg = document.getElementById('parallax-bg');
+          if (parallaxBg) {
+            var transform = parallaxBg.style.transform;
+            var match = transform.match(/translate3d\(0, ([\d.-]+)px, 0\)/);
+            if (match) {
+              document.getElementById('parallax-value').textContent = match[1] + 'px';
+            } else {
+              document.getElementById('parallax-value').textContent = '0px';
+            }
+          } else {
+            document.getElementById('parallax-value').textContent = 'No element';
+          }
+        });
       }
     </script>
   </body>
