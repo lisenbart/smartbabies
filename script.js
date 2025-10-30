@@ -71,6 +71,10 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Parallax effect function
   function updateParallax() {
+    console.log('updateParallax called');
+    console.log('isMobileView():', isMobileView());
+    console.log('parallaxBg element:', parallaxBg);
+    
     if (isMobileView() && parallaxBg) {
       var currentScroll = window.pageYOffset || window.scrollY || document.documentElement.scrollTop;
       var bgOffset = currentScroll * parallaxSpeed;
@@ -92,12 +96,15 @@ document.addEventListener('DOMContentLoaded', function() {
   // Throttled scroll handler для кращої продуктивності на iOS
   var scrollTimeout;
   function handleScroll() {
+    console.log('Scroll event triggered');
     if (scrollTimeout) {
       return;
     }
     
     scrollTimeout = requestAnimationFrame(function() {
       var currentScroll = window.pageYOffset || window.scrollY || document.documentElement.scrollTop;
+      
+      console.log('Scroll position:', currentScroll);
       
       // Header background change
       if (currentScroll > 100) {
@@ -113,6 +120,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
+  console.log('Adding scroll listener');
   window.addEventListener('scroll', handleScroll, { passive: true });
   
   // Intersection Observer для підсвітки блоків при потраплянні в центр екрану
