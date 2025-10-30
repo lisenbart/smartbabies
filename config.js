@@ -3,7 +3,7 @@
 // Optionally provide YouTube channel handle for display (not required for function)
 
 window.SMARTBABIES = {
-  GA_ID: 'G-XXXXXXXXXX',
+  GA_ID: 'G-L190DK8TX0',
   YOUTUBE_HANDLE: '@SmartBabies'
 };
 
