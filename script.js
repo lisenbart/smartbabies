@@ -134,4 +134,11 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
   }
+
+  // Доступність: фокус-кільце для .sb-card
+  var sbCards = document.querySelectorAll('.sb-card');
+  sbCards.forEach(function(card){
+    card.addEventListener('focus', function(){ card.classList.add('is-focus'); });
+    card.addEventListener('blur', function(){ card.classList.remove('is-focus'); });
+  });
 });
