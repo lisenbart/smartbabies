@@ -36,6 +36,23 @@ document.addEventListener('DOMContentLoaded', function() {
   setText('metricWatch', '3m 20s');
   setText('metricRegions', 'UA · PL · US');
 
+  // Live YouTube stats via Netlify Function (total views/subscribers)
+  fetch('/.netlify/functions/get-youtube-stats')
+    .then(function(res) { return res.ok ? res.json() : Promise.reject(res); })
+    .then(function(json) {
+      if (json && typeof json.viewCount === 'number') {
+        var formatted = Intl.NumberFormat('en', { notation: 'compact' }).format(json.viewCount);
+        setText('metricViews', formatted + ' total');
+      }
+      // Optionally show subs in watch metric area if available
+      if (json && typeof json.subscriberCount === 'number') {
+        var subs = Intl.NumberFormat('en', { notation: 'compact' }).format(json.subscriberCount);
+        var watch = document.getElementById('metricWatch');
+        if (watch) { watch.textContent = (watch.textContent + ' · ' + subs + ' subs').trim(); }
+      }
+    })
+    .catch(function(){ /* silent fallback to static values */ });
+
   var form = document.querySelector('.cta-form');
   if (form) {
     form.addEventListener('submit', function(e) {
