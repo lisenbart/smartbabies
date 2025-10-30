@@ -32,9 +32,9 @@ document.addEventListener('DOMContentLoaded', function() {
       el.textContent = value;
     }
   }
-  setText('metricViews', '100k+');
+  setText('metricViews', '120k+/mo');
   setText('metricWatch', '3m 20s');
-  setText('metricRegions', 'UA, EU, US');
+  setText('metricRegions', 'UA · PL · US');
 
   var form = document.querySelector('.cta-form');
   if (form) {
@@ -60,4 +60,61 @@ document.addEventListener('DOMContentLoaded', function() {
       header.style.background = 'rgba(11,18,32,.6)';
     }
   });
+  
+  // Покращена мобільна функціональність
+  function isMobile() {
+    return window.innerWidth <= 820;
+  }
+  
+  // Анімація карток при скролі
+  function animateCardsOnScroll() {
+    var cards = document.querySelectorAll('.card');
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.1 });
+    
+    cards.forEach(function(card) {
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(30px)';
+      card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+      observer.observe(card);
+    });
+  }
+  
+  // Ініціалізація анімацій
+  if (isMobile()) {
+    animateCardsOnScroll();
+  }
+  
+  // Покращена навігація для мобільних
+  var navLinks = document.querySelectorAll('.nav a');
+  navLinks.forEach(function(link) {
+    link.addEventListener('click', function() {
+      // Додаємо візуальний фідбек
+      this.style.transform = 'scale(0.95)';
+      setTimeout(function() {
+        link.style.transform = 'scale(1)';
+      }, 150);
+    });
+  });
+  
+  // Оптимізація для мобільних пристроїв
+  if (isMobile()) {
+    // Додаємо touch events для кращої інтерактивності
+    var cards = document.querySelectorAll('.card');
+    cards.forEach(function(card) {
+      card.addEventListener('touchstart', function() {
+        this.style.transform = 'translateY(-4px) scale(1.02)';
+      });
+      
+      card.addEventListener('touchend', function() {
+        this.style.transform = 'translateY(0) scale(1)';
+      });
+    });
+  }
 });
