@@ -1,0 +1,26 @@
+# Бекапи Cursor
+chat_exports/backups/*
+!chat_exports/backups/.gitkeep
+
+# Великі бази даних
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+# Локальні бекапи
+cursor_backups/
+*.backup
+
+# Тимчасові файли
+*.tmp
+*.temp
+~$*
+
+# Логи
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
